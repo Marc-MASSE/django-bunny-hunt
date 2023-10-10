@@ -6,4 +6,4 @@ RABBITS_NUMBER = 10
 HUNTER_POSITION_X = 0
 HUNTER_POSITION_Y = 0
 BULLET_NUMBER = 10
-SURROUNDING_POSITIONS = [(-1, -1), (-1, 0), (-1, +1), (0, -1), (0, +1), (+1, -1), (+1, 0), (+1, +1)]
+

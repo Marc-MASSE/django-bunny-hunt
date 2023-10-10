@@ -5,10 +5,20 @@ from django.shortcuts import render, redirect
 from bunnyapp.constants import FOREST_SIZE, BULLET_NUMBER, HUNTER_POSITION_X, HUNTER_POSITION_Y, TREES_NUMBER, \
     BURROWS_NUMBER, RABBITS_NUMBER
 from bunnyapp.models import Forest, Hunter, Tree, Burrow, Rabbit
+from bunnyapp.controller.bunnyapp.move import characters_move
 
 
 def welcome(request):
     if request.method == 'POST':
+        # To delete all previous forests.
+        existing_forest = Forest.objects.filter().first()
+        if existing_forest:
+            Tree.objects.filter(forest=existing_forest).delete()
+            Burrow.objects.filter(forest=existing_forest).delete()
+            Hunter.objects.filter(forest=existing_forest).delete()
+            Rabbit.objects.filter(forest=existing_forest).delete()
+            existing_forest.delete()
+
         # To initialise the forest
         forest = Forest.objects.create(size=FOREST_SIZE)
         initialize_forest(forest)
@@ -20,6 +30,11 @@ def welcome(request):
 def game(request):
     # To retrieve forest and its component data from the database
     forest = Forest.objects.first()
+
+    if request.method == 'POST':
+        characters_move()
+        return redirect('game')
+
     trees = Tree.objects.filter(forest=forest)
     hunters = Hunter.objects.filter(forest=forest)
     rabbits = Rabbit.objects.filter(forest=forest)
@@ -67,8 +82,8 @@ def initialize_forest(forest):
     # Create trees
     for _ in range(TREES_NUMBER):
         while True:
-            position_x = random.randint(0, forest.size-1)
-            position_y = random.randint(0, forest.size-1)
+            position_x = random.randint(0, forest.size - 1)
+            position_y = random.randint(0, forest.size - 1)
             if (position_x, position_y) not in used_positions:
                 Tree.objects.create(
                     forest=forest,
@@ -81,8 +96,8 @@ def initialize_forest(forest):
     # Create burrows
     for _ in range(BURROWS_NUMBER):
         while True:
-            position_x = random.randint(0, forest.size-1)
-            position_y = random.randint(0, forest.size-1)
+            position_x = random.randint(0, forest.size - 1)
+            position_y = random.randint(0, forest.size - 1)
             if (position_x, position_y) not in used_positions:
                 Burrow.objects.create(
                     forest=forest,

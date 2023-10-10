@@ -7,6 +7,10 @@
         <h2>Game</h2>
         <p> Chasseur</p>
         <p>Lapins</p>
+         <form method="post" action="{% url 'game' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Déplacer</button>
+        </form>
     </div>
     <div class="col-9">
         <table class="table table-bordered">
