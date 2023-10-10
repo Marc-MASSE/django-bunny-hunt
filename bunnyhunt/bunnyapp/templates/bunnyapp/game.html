@@ -1,0 +1,40 @@
+{% extends 'bunnyapp/base.html' %}
+
+{% block content %}
+
+<div class="container row">
+    <div class="col-3 border border-dark">
+        <h2>Game</h2>
+        <p> Chasseur</p>
+        <p>Lapins</p>
+    </div>
+    <div class="col-9">
+        <table class="table table-bordered">
+            <tbody>
+                {% for row in board %}
+                <tr>
+                    {% for cell in row %}
+                    <td>
+                        {% load static %}
+                        {% if cell == 'tree' %}
+                        <img src="{% static 'bunnyapp/tree.png' %}" alt="Tree">
+                        {% endif %}
+                        {% if cell == 'hunter' %}
+                        <img src="{% static 'bunnyapp/hunter.png' %}" alt="Hunter">
+                        {% endif %}
+                        {% if cell == 'rabbit' %}
+                        <img src="{% static 'bunnyapp/brown_rabbit.png' %}" alt="Rabbit">
+                        {% endif %}
+                        {% if cell == 'burrow' %}
+                        <img src="{% static 'bunnyapp/burrow.png' %}" alt="Burrow">
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

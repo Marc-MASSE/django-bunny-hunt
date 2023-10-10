@@ -3,6 +3,7 @@ from django.db import models
 
 class Forest(models.Model):
     size = models.IntegerField()
+    objects = models.Manager()
 
 
 class Hunter(models.Model):
@@ -12,6 +13,7 @@ class Hunter(models.Model):
     kilometers = models.IntegerField()
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    objects = models.Manager()
 
     def hunt(self):
         # Something
@@ -25,6 +27,7 @@ class Rabbit(models.Model):
     kilometers = models.IntegerField()
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    objects = models.Manager()
 
     def flee(self):
         # Something
@@ -35,11 +38,12 @@ class Tree(models.Model):
     forest = models.ForeignKey(Forest, on_delete=models.DO_NOTHING)
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    objects = models.Manager()
 
 
 class Burrow(models.Model):
     forest = models.ForeignKey(Forest, on_delete=models.DO_NOTHING)
     position_x = models.IntegerField()
     position_y = models.IntegerField()
-
+    objects = models.Manager()
 

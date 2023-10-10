@@ -1,0 +1,18 @@
+{% extends 'bunnyapp/base.html' %}
+
+{% block content %}
+
+<h2>Welcome to Rabbit Hunt</h2>
+
+{% load static %}
+<img src="{% static 'bunnyapp/rabbit.jpg' %}" alt="Rabbit">
+
+<form method="post" action="{% url 'welcome' %}">
+  {% csrf_token %}
+  <!--
+  <input type="hidden" name="board" value="{{ board }}">
+  -->
+  <button type="submit">Start the game</button>
+</form>
+
+{% endblock %}
