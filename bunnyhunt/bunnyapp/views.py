@@ -75,7 +75,8 @@ def initialize_forest(forest):
         hunger=0,
         kilometers=0,
         position_x=HUNTER_POSITION_X,
-        position_y=HUNTER_POSITION_Y
+        position_y=HUNTER_POSITION_Y,
+        message=""
     )
     used_positions.add((HUNTER_POSITION_X, HUNTER_POSITION_Y))
 
@@ -119,7 +120,8 @@ def initialize_forest(forest):
                     color="brown",
                     kilometers=0,
                     position_x=position_x,
-                    position_y=position_y
+                    position_y=position_y,
+                    message=""
                 )
                 used_positions.add((position_x, position_y))
                 break

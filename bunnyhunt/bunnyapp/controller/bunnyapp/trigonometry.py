@@ -31,20 +31,16 @@ def is_rabbit_hidden(hunter_x, hunter_y, rabbit_x, rabbit_y, tree_x, tree_y):
     # To calculate the scalar product of hunter-tree and hunter-rabbit vectors
     scalar_product = ((tree_x - hunter_x) * (rabbit_x - hunter_x)
                       + (tree_y - hunter_y) * (rabbit_y - hunter_y))
+
     # To calculate the angle between hunter-tree and hunter-rabbit vectors
-    angle_tree_hunter_rabbit = (
-        math.acos(
-            scalar_product /
-            (distance(hunter_x, hunter_y, tree_x, tree_y) * distance(hunter_x, hunter_y, rabbit_x, rabbit_y))
-        )
-    )
-    # To check if the rabbit is behind the tree
+    hunter_tree_distance = distance(hunter_x, hunter_y, tree_x, tree_y)
+    hunter_rabbit_distance = distance(hunter_x, hunter_y, rabbit_x, rabbit_y)
+    cosine_value = scalar_product / (hunter_tree_distance * hunter_rabbit_distance)
+    cosine_value = max(-1, min(1, cosine_value))  # To avoid rounding problems in calculations
+    angle_tree_hunter_rabbit = math.acos(cosine_value)
+
+    # To check if the rabbit is hidden by the tree
     if ((abs(angle_tree_hunter_rabbit) < abs(hunter_blind_spot(hunter_x, hunter_y, tree_x, tree_y)))
             and (distance(hunter_x, hunter_y, rabbit_x, rabbit_y) > distance(hunter_x, hunter_y, tree_x, tree_y))):
         return True
-
     return False
-
-
-def visible_rabbits():
-    pass

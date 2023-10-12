@@ -4,9 +4,13 @@
 
 <div class="container row">
     <div class="col-3 border border-dark">
-        <h2>Game</h2>
-        <p> Chasseur</p>
-        <p>Lapins</p>
+        <h3> Chasseur</h3>
+        <p>Nombre de balles : {{ hunters.0.bullet }}</p>
+        <p>{{ hunters.0.message }}</p>
+        <h3>Lapins</h3>
+        {% for rabbit in rabbits %}
+            <p>({{ rabbit.position_x }}, {{ rabbit.position_y }}) : {{ rabbit.message }}</p>
+        {% endfor %}
          <form method="post" action="{% url 'game' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary">Déplacer</button>

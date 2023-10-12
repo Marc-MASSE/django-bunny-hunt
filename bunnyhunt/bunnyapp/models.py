@@ -1,5 +1,8 @@
 from django.db import models
 
+from bunnyapp.constants import HUNTER_POSITION_X, HUNTER_POSITION_Y, DANGER_DISTANCE
+from bunnyapp.controller.bunnyapp.trigonometry import distance
+
 
 class Forest(models.Model):
     size = models.IntegerField()
@@ -13,6 +16,7 @@ class Hunter(models.Model):
     kilometers = models.IntegerField()
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    message = models.CharField(max_length=24, default="None")
     objects = models.Manager()
 
     def hunt(self):
@@ -27,11 +31,15 @@ class Rabbit(models.Model):
     kilometers = models.IntegerField()
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    message = models.CharField(max_length=24, default="None")
     objects = models.Manager()
 
-    def flee(self):
-        # Something
-        pass
+    def pursued(self):
+        hunter = Hunter.objects.first()
+        hunter_distance = distance(self.position_x, self.position_y, hunter.position_x, hunter.position_y)
+        if hunter_distance < DANGER_DISTANCE:
+            return True
+        return False
 
 
 class Tree(models.Model):
