@@ -20,8 +20,16 @@ class Hunter(models.Model):
     objects = models.Manager()
 
     def hunt(self):
-        # Something
-        pass
+        """
+        To check if the hunter is one square away from a rabbit
+        :return: True if the hunter is next to a rabbit, False otherwise.
+        """
+        rabbits = Rabbit.objects.all()
+        for rabbit in rabbits:
+            rabbit_distance = distance(self.position_x, self.position_y, rabbit.position_x, rabbit.position_y)
+            if rabbit_distance < 2:
+                return True
+        return False
 
 
 class Rabbit(models.Model):

@@ -13,8 +13,9 @@
         {% endfor %}
          <form method="post" action="{% url 'game' %}">
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Déplacer</button>
+            <button type="submit" class="btn btn-primary">Mouvement suivant</button>
         </form>
+        <a href="{% url 'welcome' %}" class="btn btn-danger my-2">Abandonner</a>
     </div>
     <div class="col-9">
         <table class="table table-bordered">
@@ -35,6 +36,9 @@
                         {% endif %}
                         {% if cell == 'burrow' %}
                         <img src="{% static 'bunnyapp/burrow.png' %}" alt="Burrow">
+                        {% endif %}
+                        {% if cell == 'hidden' %}
+                        <img src="{% static 'bunnyapp/hidden.png' %}" alt="Hidden">
                         {% endif %}
                     </td>
                     {% endfor %}

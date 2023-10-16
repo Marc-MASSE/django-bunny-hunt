@@ -55,6 +55,11 @@ def game(request):
     for burrow in burrows:
         board[burrow.position_y][burrow.position_x] = 'burrow'
 
+    for burrow in burrows:
+        for rabbit in rabbits:
+            if rabbit.position_x == burrow.position_x and rabbit.position_y == burrow.position_y:
+                board[burrow.position_y][burrow.position_x] = 'hidden'
+
     context = {
         'board': board,
         'forest': forest,
