@@ -1,11 +1,12 @@
 from django.db import models
 
-from bunnyapp.constants import HUNTER_POSITION_X, HUNTER_POSITION_Y, DANGER_DISTANCE
+from bunnyapp.constants import DANGER_DISTANCE
 from bunnyapp.controller.bunnyapp.trigonometry import distance
 
 
 class Forest(models.Model):
     size = models.IntegerField()
+    message = models.CharField(max_length=24, default="")
     objects = models.Manager()
 
 
@@ -22,14 +23,14 @@ class Hunter(models.Model):
     def hunt(self):
         """
         To check if the hunter is one square away from a rabbit
-        :return: True if the hunter is next to a rabbit, False otherwise.
+        :return: The rabbit if the hunter is next to a rabbit, None otherwise.
         """
         rabbits = Rabbit.objects.all()
         for rabbit in rabbits:
             rabbit_distance = distance(self.position_x, self.position_y, rabbit.position_x, rabbit.position_y)
             if rabbit_distance < 2:
-                return True
-        return False
+                return rabbit
+        return None
 
 
 class Rabbit(models.Model):
@@ -46,7 +47,11 @@ class Rabbit(models.Model):
         hunter = Hunter.objects.first()
         hunter_distance = distance(self.position_x, self.position_y, hunter.position_x, hunter.position_y)
         if hunter_distance < DANGER_DISTANCE:
+            self.speed = 2
+            self.save()
             return True
+        self.speed = 1
+        self.save()
         return False
 
 
@@ -61,5 +66,6 @@ class Burrow(models.Model):
     forest = models.ForeignKey(Forest, on_delete=models.DO_NOTHING)
     position_x = models.IntegerField()
     position_y = models.IntegerField()
+    occupied = models.BooleanField(default=False)
     objects = models.Manager()
 

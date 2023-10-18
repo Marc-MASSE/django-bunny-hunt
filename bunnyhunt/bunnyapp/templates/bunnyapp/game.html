@@ -4,6 +4,7 @@
 
 <div class="container row">
     <div class="col-3 border border-dark">
+        <h3 class="text-danger">{{forest.message}}</h3>
         <h3> Chasseur</h3>
         <p>Nombre de balles : {{ hunters.0.bullet }}</p>
         <p>{{ hunters.0.message }}</p>
@@ -15,7 +16,7 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-primary">Mouvement suivant</button>
         </form>
-        <a href="{% url 'welcome' %}" class="btn btn-danger my-2">Abandonner</a>
+        <a href="{% url 'welcome' %}" class="btn btn-danger my-2">Recommencer</a>
     </div>
     <div class="col-9">
         <table class="table table-bordered">

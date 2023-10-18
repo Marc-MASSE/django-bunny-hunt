@@ -6,18 +6,21 @@ from bunnyapp.constants import FOREST_SIZE, BULLET_NUMBER, HUNTER_POSITION_X, HU
     BURROWS_NUMBER, RABBITS_NUMBER
 from bunnyapp.models import Forest, Hunter, Tree, Burrow, Rabbit
 from bunnyapp.controller.bunnyapp.move import characters_move
+from bunnyapp.controller.bunnyapp.trigonometry import distance
+from bunnyapp.constants import FOREST_SIZE, DANGER_DISTANCE
 
 
 def welcome(request):
     if request.method == 'POST':
         # To delete all previous forests.
-        existing_forest = Forest.objects.filter().first()
-        if existing_forest:
-            Tree.objects.filter(forest=existing_forest).delete()
-            Burrow.objects.filter(forest=existing_forest).delete()
-            Hunter.objects.filter(forest=existing_forest).delete()
-            Rabbit.objects.filter(forest=existing_forest).delete()
-            existing_forest.delete()
+        while Forest.objects.filter().first() is not None:
+            existing_forest = Forest.objects.filter().first()
+            if existing_forest:
+                Tree.objects.filter(forest=existing_forest).delete()
+                Burrow.objects.filter(forest=existing_forest).delete()
+                Hunter.objects.filter(forest=existing_forest).delete()
+                Rabbit.objects.filter(forest=existing_forest).delete()
+                existing_forest.delete()
 
         # To initialise the forest
         forest = Forest.objects.create(size=FOREST_SIZE)
@@ -30,15 +33,21 @@ def welcome(request):
 def game(request):
     # To retrieve forest and its component data from the database
     forest = Forest.objects.first()
-
-    if request.method == 'POST':
-        characters_move()
-        return redirect('game')
-
     trees = Tree.objects.filter(forest=forest)
     hunters = Hunter.objects.filter(forest=forest)
     rabbits = Rabbit.objects.filter(forest=forest)
     burrows = Burrow.objects.filter(forest=forest)
+
+    if request.method == 'POST':
+        if hunters[0].bullet <= 0:
+            forest.message = "Les lapins ont gagné."
+            forest.save()
+        elif hunters[0].hunger < 0:
+            forest.message = "Le chasseur a gagné."
+            forest.save()
+        else:
+            characters_move()
+        return redirect('game')
 
     # To create the board from this data
     board = [['' for _ in range(forest.size)] for _ in range(forest.size)]
@@ -118,7 +127,9 @@ def initialize_forest(forest):
         while True:
             position_x = random.randint(0, forest.size - 1)
             position_y = random.randint(0, forest.size - 1)
-            if (position_x, position_y) not in used_positions:
+            hunter_distance = distance(position_x, position_y, HUNTER_POSITION_X, HUNTER_POSITION_Y)
+            print("Rabbit-hunter distance = ", hunter_distance)
+            if ((position_x, position_y) not in used_positions) and (hunter_distance > DANGER_DISTANCE):
                 Rabbit.objects.create(
                     forest=forest,
                     speed=1,

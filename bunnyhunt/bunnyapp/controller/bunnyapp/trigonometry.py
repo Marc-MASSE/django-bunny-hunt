@@ -14,7 +14,7 @@ def hunter_blind_spot(hunter_x, hunter_y, tree_x, tree_y):
     :param tree_y: tree y position
     :return: an angle
     """
-    return math.atan(1 / distance(hunter_x, hunter_y, tree_x, tree_y))
+    return math.atan(2 / distance(hunter_x, hunter_y, tree_x, tree_y))
 
 
 def is_rabbit_hidden(hunter_x, hunter_y, rabbit_x, rabbit_y, tree_x, tree_y):
@@ -42,7 +42,5 @@ def is_rabbit_hidden(hunter_x, hunter_y, rabbit_x, rabbit_y, tree_x, tree_y):
     # To check if the rabbit is hidden by the tree
     if ((abs(angle_tree_hunter_rabbit) < abs(hunter_blind_spot(hunter_x, hunter_y, tree_x, tree_y)))
             and (distance(hunter_x, hunter_y, rabbit_x, rabbit_y) > distance(hunter_x, hunter_y, tree_x, tree_y))):
-        print(f"Chasseur ({hunter_x},{hunter_y})")
-        print(f"Lapin ({rabbit_x},{rabbit_y}) caché par arbre ({tree_x},{tree_y})")
         return True
     return False
